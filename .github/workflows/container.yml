@@ -1,0 +1,27 @@
+name: Container
+
+on: [push]
+
+jobs:
+  node-docker:
+    runs-on: ubuntu-latest
+    services:
+      app:
+        image: ezcoder247/todo_app
+        ports:
+          - "3001:3000"
+      mongo:
+        image: mongo
+        ports:
+          - "27017:27017"
+
+    steps:
+      - name: Post a user
+        run: "curl --location --request POST 'http://localhost:3001/api/user' \
+          --header 'Content-Type: application/json' \
+          --data-raw '{
+          \"username\":\"git-bot-user\",
+          \"address\":\"git-bot-address\"
+          }'"
+      - name: Get User
+        run: "curl --location --request GET 'http://localhost:3001/api/users'"
